@@ -1,5 +1,6 @@
 from typing import Sequence
 
+import asyncio
 import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -14,6 +15,7 @@ from src.application.common.exception_handlers import (
 )
 from src.application.common.exceptions.app_exception import AppException
 from src.infrastructure.config.config_reader import ConfigReader
+from src.infrastructure.infrastructure_collection import InfrastructureCollection
 
 
 class WebService:
@@ -56,7 +58,9 @@ class WebService:
 
     def __register_controllers(self) -> None:
         api_prefix = self.config_reader.get(
-            "application.api_prefix", "/api/v1")
+            "application.api_prefix",
+            "/api/v1",
+        )
 
         for controller in self.controllers:
             self.app.include_router(
@@ -64,9 +68,24 @@ class WebService:
                 prefix=f"{api_prefix}{controller.route_prefix}",
             )
 
+    async def init_database(self) -> None:
+        db_context = InfrastructureCollection.db_context()
+
+        await db_context.init_db()
+
     def start(self) -> None:
-        host = self.config_reader.get("application.host", "127.0.0.1")
-        port = int(self.config_reader.get("application.port", 8000))
+        host = self.config_reader.get(
+            "application.host",
+            "127.0.0.1"
+        )
+        port = int(
+            self.config_reader.get(
+                "application.port",
+                8000,
+            )
+        )
+
+        asyncio.run(self.init_database())
 
         uvicorn.run(
             self.app,

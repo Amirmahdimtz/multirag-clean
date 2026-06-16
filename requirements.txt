@@ -4,3 +4,6 @@ pydantic-settings==2.9.1
 dependency-injector==4.48.1
 pyyaml
 pydantic
+sqlalchemy
+asyncpg
+aiosqlite

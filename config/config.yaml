@@ -4,3 +4,6 @@ application:
   host: "127.0.0.1"
   port: 8000
   api_prefix: "/api/v1"
+
+database:
+  url: "sqlite+aiosqlite:///./test.db"
