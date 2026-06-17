@@ -1,18 +1,25 @@
 from dependency_injector import containers, providers
 
-from src.application.health.health_controller import HealthController
 from src.application.web import WebService
 from src.infrastructure.infrastructure_collection import InfrastructureCollection
+from src.application.health.health_controller import HealthController
+from src.application.user.user_controller import UserController
 
 
 class ApplicationCollection(containers.DeclarativeContainer):
+
     health_controller = providers.Factory(
         HealthController,
         config_reader=InfrastructureCollection.config_reader,
     )
 
+    user_controller = providers.Factory(
+        UserController,
+    )
+
     controllers = providers.List(
         health_controller,
+        user_controller,
     )
 
     web_service = providers.Factory(
