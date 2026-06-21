@@ -1,19 +1,19 @@
 from fastapi import APIRouter
 
-from src.core.core_collection import CoreCollection
 from src.application.common.controllers.base_controller import BaseController
 from src.application.common.dtos.base_response_dto import BaseResponseDto
 from src.application.user.dtos.create_user_request_dto import (
     CreateUserRequestDto,
 )
+from src.core.user.user_business import UserBusiness
 from src.application.user.dtos.user_response_dto import UserResponseDto
 
 
 class UserController(BaseController):
     route_prefix = "/users"
 
-    def __init__(self) -> None:
-        self.user_business = CoreCollection.user_business()
+    def __init__(self, user_business: UserBusiness) -> None:
+        self.user_business = user_business
 
     def api(self) -> APIRouter:
         router = APIRouter(

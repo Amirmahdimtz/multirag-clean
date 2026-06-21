@@ -13,9 +13,9 @@ from src.application.common.exception_handlers import (
     unhandled_exception_handler,
     validation_exception_handler,
 )
-from src.application.common.exceptions.app_exception import AppException
+from src.core.exceptions.app_exception import AppException
 from src.infrastructure.config.config_reader import ConfigReader
-from src.infrastructure.infrastructure_collection import InfrastructureCollection
+from src.infrastructure.database.db_context import DbContext
 
 
 class WebService:
@@ -23,9 +23,11 @@ class WebService:
         self,
         config_reader: ConfigReader,
         controllers: Sequence[BaseController],
+        db_context: DbContext,
     ) -> None:
         self.config_reader = config_reader
         self.controllers = controllers
+        self.db_context = db_context
 
         self.app = FastAPI(
             title=self.config_reader.get("application.name", "MultiRAG Clean"),
@@ -69,9 +71,8 @@ class WebService:
             )
 
     async def init_database(self) -> None:
-        db_context = InfrastructureCollection.db_context()
 
-        await db_context.init_db()
+        await self.db_context.init_db()
 
     def start(self) -> None:
         host = self.config_reader.get(

@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.application.common.dtos.error_response_dto import ErrorResponseDto
-from src.application.common.exceptions.app_exception import AppException
+from src.core.exceptions.app_exception import AppException
 
 
 async def app_exception_handler(

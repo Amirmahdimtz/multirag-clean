@@ -1,9 +1,11 @@
 from dependency_injector import containers, providers
 
 from src.application.web import WebService
-from src.infrastructure.infrastructure_collection import InfrastructureCollection
-from src.application.health.health_controller import HealthController
+from src.core.core_collection import CoreCollection
 from src.application.user.user_controller import UserController
+from src.application.health.health_controller import HealthController
+from src.application.dataset.dataset_controller import DatasetController
+from src.infrastructure.infrastructure_collection import InfrastructureCollection
 
 
 class ApplicationCollection(containers.DeclarativeContainer):
@@ -15,15 +17,23 @@ class ApplicationCollection(containers.DeclarativeContainer):
 
     user_controller = providers.Factory(
         UserController,
+        user_business=CoreCollection.user_business,
+    )
+
+    dataset_controller = providers.Factory(
+        DatasetController,
+        dataset_business=CoreCollection.dataset_business,
     )
 
     controllers = providers.List(
         health_controller,
         user_controller,
+        dataset_controller,
     )
 
     web_service = providers.Factory(
         WebService,
         config_reader=InfrastructureCollection.config_reader,
         controllers=controllers,
+        db_context=InfrastructureCollection.db_context,
     )
