@@ -16,4 +16,5 @@ class CoreCollection(containers.DeclarativeContainer):
         DatasetBusiness,
         dataset_repository=InfrastructureCollection.dataset_repository,
         file_storage_service=InfrastructureCollection.file_storage_service,
+        document_processing_service=InfrastructureCollection.document_processing_service,
     )

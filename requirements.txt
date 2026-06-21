@@ -8,3 +8,5 @@ sqlalchemy
 asyncpg
 aiosqlite
 python-multipart
+pypdf
+python-docx

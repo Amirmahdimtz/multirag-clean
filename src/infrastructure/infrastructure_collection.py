@@ -8,6 +8,11 @@ from src.infrastructure.repositories.chat_session_repository import ChatSessionR
 from src.infrastructure.repositories.chat_message_repository import ChatMessageRepository
 from src.infrastructure.repositories.rag_system_repository import RAGSystemRepository
 from src.infrastructure.storage.file_storage_service import FileStorageService
+from src.infrastructure.document_processing.text_extractor import TextExtractor
+from src.infrastructure.document_processing.text_splitter import TextSplitter
+from src.infrastructure.document_processing.document_processing_service import (
+    DocumentProcessingService,
+)
 
 
 class InfrastructureCollection(containers.DeclarativeContainer):
@@ -48,4 +53,20 @@ class InfrastructureCollection(containers.DeclarativeContainer):
 
     file_storage_service = providers.Singleton(
         FileStorageService,
+    )
+
+    text_extractor = providers.Singleton(
+        TextExtractor,
+    )
+
+    text_splitter = providers.Singleton(
+        TextSplitter,
+        chunk_size=1000,
+        chunk_overlap=150,
+    )
+
+    document_processing_service = providers.Singleton(
+        DocumentProcessingService,
+        text_extractor=text_extractor,
+        text_splitter=text_splitter,
     )
