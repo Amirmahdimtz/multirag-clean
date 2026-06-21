@@ -7,3 +7,4 @@ pydantic
 sqlalchemy
 asyncpg
 aiosqlite
+python-multipart

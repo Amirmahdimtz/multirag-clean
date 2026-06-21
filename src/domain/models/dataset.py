@@ -1,34 +1,47 @@
-from datetime import datetime
 from typing import Optional
-from uuid import UUID
+
+from sqlalchemy import Boolean, Enum as SqlEnum, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.domain.common.base_entity import BaseEntity
 from src.domain.enums.dataset_type import DatasetType
 
 
 class Dataset(BaseEntity):
-    def __init__(
-        self,
-        name: str,
-        file_name: str,
-        dataset_type: DatasetType,
-        content_type: Optional[str] = None,
-        is_vectorized: bool = False,
-        id: Optional[UUID] = None,
-        created_at: Optional[datetime] = None,
-        updated_at: Optional[datetime] = None,
-    ) -> None:
-        super().__init__(
-            id=id,
-            created_at=created_at,
-            updated_at=updated_at,
-        )
+    __tablename__ = "datasets"
 
-        self.name = name
-        self.file_name = file_name
-        self.dataset_type = dataset_type
-        self.content_type = content_type
-        self.is_vectorized = is_vectorized
+    name: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+        index=True,
+    )
+
+    file_name: Mapped[str] = mapped_column(
+        String(500),
+        nullable=False,
+    )
+
+    dataset_type: Mapped[DatasetType] = mapped_column(
+        SqlEnum(
+            DatasetType,
+            name="dataset_type",
+            native_enum=False,
+            values_callable=lambda enum: [item.value for item in enum],
+        ),
+        nullable=False,
+        default=DatasetType.UNKNOWN,
+    )
+
+    content_type: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    is_vectorized: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+    )
 
     def mark_as_vectorized(self) -> None:
         self.is_vectorized = True

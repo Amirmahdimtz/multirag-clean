@@ -1,26 +1,30 @@
-from datetime import datetime
 from typing import Optional
 from uuid import UUID
+
+from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.types import Uuid
 
 from src.domain.common.base_entity import BaseEntity
 
 
 class RAGSystem(BaseEntity):
-    def __init__(
-        self,
-        name: str,
-        dataset_id: UUID,
-        description: Optional[str] = None,
-        id: Optional[UUID] = None,
-        created_at: Optional[datetime] = None,
-        updated_at: Optional[datetime] = None,
-    ) -> None:
-        super().__init__(
-            id=id,
-            created_at=created_at,
-            updated_at=updated_at,
-        )
+    __tablename__ = "rag_systems"
 
-        self.name = name
-        self.description = description
-        self.dataset_id = dataset_id
+    name: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+        index=True,
+    )
+
+    description: Mapped[Optional[str]] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    dataset_id: Mapped[UUID] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey("datasets.id"),
+        nullable=False,
+        index=True,
+    )

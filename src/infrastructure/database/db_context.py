@@ -22,6 +22,12 @@ class DbContext:
         )
 
     async def init_db(self) -> None:
+        from src.domain.models.user import User
+        from src.domain.models.dataset import Dataset
+        from src.domain.models.rag_system import RAGSystem
+        from src.domain.models.chat_session import ChatSession
+        from src.domain.models.chat_message import ChatMessage
+
         async with self.engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
