@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from sqlalchemy import select
 
@@ -11,9 +12,12 @@ class ChatMessageRepository(BaseRepository[ChatMessage]):
     def __init__(self, db_context: DbContext) -> None:
         super().__init__(db_context)
 
-    async def get_by_session_id(self, session_id: str) -> List[ChatMessage]:
+    async def get_by_session_id(self, session_id: UUID) -> List[ChatMessage]:
         async with self.db_context.get_session() as session:
             result = await session.execute(
-                select(ChatMessage).where(ChatMessage.session_id == session_id)
+                select(ChatMessage)
+                .where(ChatMessage.session_id == session_id)
+                .order_by(ChatMessage.created_at.asc())
             )
+
             return list(result.scalars().all())

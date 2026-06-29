@@ -32,3 +32,15 @@ class ChatMessage(BaseEntity):
         Text,
         nullable=False,
     )
+
+    def __init__(
+        self,
+        session_id: UUID,
+        role: MessageRole,
+        content: str,
+    ) -> None:
+        super().__init__()
+
+        self.session_id = session_id
+        self.role = role
+        self.content = content

@@ -48,6 +48,21 @@ class ChatSession(BaseEntity):
         nullable=False,
     )
 
+    def __init__(
+        self,
+        user_id: UUID,
+        name: str,
+        llm_type: LLMType,
+        rag_system_id: Optional[UUID] = None,
+    ) -> None:
+        super().__init__()
+
+        self.user_id = user_id
+        self.name = name
+        self.llm_type = llm_type
+        self.rag_system_id = rag_system_id
+        self.last_active_at = datetime.now(timezone.utc)
+
     def mark_as_active(self) -> None:
         self.last_active_at = datetime.now(timezone.utc)
         self.touch()
