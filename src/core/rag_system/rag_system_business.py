@@ -1,10 +1,15 @@
 from typing import List
 from uuid import UUID
 
+from src.core.rag_system.rag_answer_result import RAGAnswerResult
 from src.core.exceptions.bad_request_exception import BadRequestException
 from src.core.exceptions.not_found_exception import NotFoundException
 from src.domain.models.dataset import Dataset
 from src.domain.models.rag_system import RAGSystem
+from src.core.rag_system.rag_answer_context_result import (
+    RAGAnswerContextResult,
+)
+from src.core.rag_system.rag_answer_result import RAGAnswerResult
 
 
 class RAGSystemBusiness:
@@ -14,11 +19,13 @@ class RAGSystemBusiness:
         dataset_repository,
         embedding_service,
         vector_store_service,
+        llm_factory,
     ) -> None:
         self.rag_system_repository = rag_system_repository
         self.dataset_repository = dataset_repository
         self.embedding_service = embedding_service
         self.vector_store_service = vector_store_service
+        self.llm_factory = llm_factory
 
     async def create(
         self,
@@ -89,4 +96,40 @@ class RAGSystemBusiness:
             dataset_id=rag_system.dataset_id,
             query_embedding=query_embedding,
             limit=limit,
+        )
+
+    async def answer_question(
+        self,
+        rag_system_id: UUID,
+        question: str,
+        limit: int = 5,
+    ) -> RAGAnswerResult:
+        search_results = await self.search(
+            rag_system_id=rag_system_id,
+            query=question,
+            limit=limit,
+        )
+
+        contexts = [
+            result.document.content
+            for result in search_results
+        ]
+
+        rag_llm = self.llm_factory.create_rag_llm()
+
+        answer = await rag_llm.generate(
+            question=question,
+            contexts=contexts,
+        )
+
+        return RAGAnswerResult(
+            answer=answer,
+            contexts=[
+                RAGAnswerContextResult(
+                    chunk_index=result.document.chunk_index,
+                    content=result.document.content,
+                    score=result.score,
+                )
+                for result in search_results
+            ],
         )

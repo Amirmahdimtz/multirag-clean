@@ -11,6 +11,7 @@ from src.infrastructure.storage.file_storage_service import FileStorageService
 from src.infrastructure.document_processing.text_extractor import TextExtractor
 from src.infrastructure.document_processing.text_splitter import TextSplitter
 from src.infrastructure.embedding.embedding_service import EmbeddingService
+from src.infrastructure.llm.fake_chat_model_service import FakeChatModelService
 from src.infrastructure.vector_store.in_memory_vector_store_service import (
     InMemoryVectorStoreService,
 )
@@ -82,4 +83,8 @@ class InfrastructureCollection(containers.DeclarativeContainer):
 
     vector_store_service = providers.Singleton(
         InMemoryVectorStoreService,
+    )
+
+    chat_model_service = providers.Singleton(
+        FakeChatModelService,
     )

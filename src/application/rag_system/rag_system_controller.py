@@ -23,6 +23,18 @@ from src.application.rag_system.dtos.rag_system_response_dto import (
 from src.application.rag_system.dtos.rag_system_single_response_dto import (
     RAGSystemSingleResponseDto,
 )
+from src.application.rag_system.dtos.ask_rag_system_request_dto import (
+    AskRAGSystemRequestDto,
+)
+from src.application.rag_system.dtos.ask_rag_system_response_dto import (
+    AskRAGSystemResponseDto,
+)
+from src.application.rag_system.dtos.ask_rag_system_data_dto import (
+    AskRAGSystemDataDto,
+)
+from src.application.rag_system.dtos.rag_answer_context_dto import (
+    RAGAnswerContextDto,
+)
 
 
 class RAGSystemController(BaseController):
@@ -132,6 +144,36 @@ class RAGSystemController(BaseController):
                     )
                     for result in results
                 ],
+            )
+
+        @router.post(
+            "/{rag_system_id}/ask",
+            response_model=AskRAGSystemResponseDto,
+        )
+        async def ask_rag_system(
+            rag_system_id: UUID,
+            dto: AskRAGSystemRequestDto,
+        ) -> AskRAGSystemResponseDto:
+            result = await self.rag_system_business.answer_question(
+                rag_system_id=rag_system_id,
+                question=dto.question,
+                limit=dto.limit,
+            )
+
+            return AskRAGSystemResponseDto(
+                success=True,
+                message="RAG answer generated successfully",
+                data=AskRAGSystemDataDto(
+                    answer=result.answer,
+                    contexts=[
+                        RAGAnswerContextDto(
+                            chunk_index=context.document.chunk_index,
+                            content=context.document.content,
+                            score=context.score,
+                        )
+                        for context in result.contexts
+                    ],
+                ),
             )
 
         return router
