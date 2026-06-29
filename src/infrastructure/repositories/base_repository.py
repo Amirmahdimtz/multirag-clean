@@ -20,7 +20,15 @@ class BaseRepository(Generic[T]):
         async with self.db_context.get_session() as session:
             return await session.get(model, id)
 
+    async def update(self, entity: T) -> T:
+        async with self.db_context.get_session() as session:
+            merged_entity = await session.merge(entity)
+            await session.commit()
+            await session.refresh(merged_entity)
+            return merged_entity
+
     async def delete(self, entity: T) -> None:
         async with self.db_context.get_session() as session:
-            await session.delete(entity)
+            managed_entity = await session.merge(entity)
+            await session.delete(managed_entity)
             await session.commit()

@@ -12,6 +12,18 @@ from src.application.dataset.dtos.document_chunk_preview_dto import (
 from src.application.dataset.dtos.document_chunk_preview_response_dto import (
     DocumentChunkPreviewResponseDto,
 )
+from src.application.dataset.dtos.vector_search_response_dto import (
+    VectorSearchResponseDto,
+)
+from src.application.dataset.dtos.vector_search_result_dto import (
+    VectorSearchResultDto,
+)
+from src.application.dataset.dtos.vectorize_dataset_data_dto import (
+    VectorizeDatasetDataDto,
+)
+from src.application.dataset.dtos.vectorize_dataset_response_dto import (
+    VectorizeDatasetResponseDto,
+)
 
 
 class DatasetController(BaseController):
@@ -63,6 +75,49 @@ class DatasetController(BaseController):
                         is_vectorized=dataset.is_vectorized,
                     )
                     for dataset in datasets
+                ],
+            )
+
+        @router.post(
+            "/{dataset_id}/vectorize",
+            response_model=VectorizeDatasetResponseDto,
+        )
+        async def vectorize_dataset(dataset_id: UUID):
+            vector_count = await self.dataset_business.vectorize_dataset(dataset_id)
+
+            return VectorizeDatasetResponseDto(
+                success=True,
+                message="Dataset vectorized successfully",
+                data=VectorizeDatasetDataDto(
+                    vector_count=vector_count,
+                ),
+            )
+
+        @router.get(
+            "/{dataset_id}/search",
+            response_model=VectorSearchResponseDto,
+        )
+        async def search_dataset(
+            dataset_id: UUID,
+            query: str,
+            limit: int = 5,
+        ):
+            results = await self.dataset_business.search_dataset(
+                dataset_id=dataset_id,
+                query=query,
+                limit=limit,
+            )
+
+            return VectorSearchResponseDto(
+                success=True,
+                message="Vector search completed successfully",
+                data=[
+                    VectorSearchResultDto(
+                        chunk_index=result.document.chunk_index,
+                        content=result.document.content,
+                        score=result.score,
+                    )
+                    for result in results
                 ],
             )
 
