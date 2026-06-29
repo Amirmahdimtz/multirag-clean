@@ -1,0 +1,30 @@
+# Virtual environment
+venv/
+
+# Local database
+*.db
+test.db
+
+# Storage / uploads / logs / generated files
+storage/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/
