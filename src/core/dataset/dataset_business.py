@@ -38,7 +38,10 @@ class DatasetBusiness:
         return await self.dataset_repository.get_all()
 
     async def get_by_id(self, dataset_id: UUID):
-        dataset = await self.dataset_repository.get_by_id(Dataset, str(dataset_id))
+        dataset = await self.dataset_repository.get_by_id(
+            Dataset,
+            dataset_id,
+        )
 
         if dataset is None:
             raise NotFoundException("Dataset not found")

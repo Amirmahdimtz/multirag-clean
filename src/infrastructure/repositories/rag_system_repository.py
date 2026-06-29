@@ -8,6 +8,8 @@ from src.infrastructure.repositories.base_repository import BaseRepository
 
 
 class RAGSystemRepository(BaseRepository[RAGSystem]):
+    model = RAGSystem
+
     def __init__(self, db_context: DbContext) -> None:
         super().__init__(db_context)
 

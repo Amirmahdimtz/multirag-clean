@@ -6,6 +6,9 @@ from src.application.user.user_controller import UserController
 from src.application.health.health_controller import HealthController
 from src.application.dataset.dataset_controller import DatasetController
 from src.infrastructure.infrastructure_collection import InfrastructureCollection
+from src.application.rag_system.rag_system_controller import (
+    RAGSystemController,
+)
 
 
 class ApplicationCollection(containers.DeclarativeContainer):
@@ -25,10 +28,16 @@ class ApplicationCollection(containers.DeclarativeContainer):
         dataset_business=CoreCollection.dataset_business,
     )
 
+    rag_system_controller = providers.Factory(
+        RAGSystemController,
+        rag_system_business=CoreCollection.rag_system_business,
+    )
+
     controllers = providers.List(
         health_controller,
         user_controller,
         dataset_controller,
+        rag_system_controller,
     )
 
     web_service = providers.Factory(

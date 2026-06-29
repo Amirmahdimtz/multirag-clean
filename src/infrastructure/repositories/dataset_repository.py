@@ -8,6 +8,8 @@ from src.infrastructure.repositories.base_repository import BaseRepository
 
 
 class DatasetRepository(BaseRepository[Dataset]):
+    model = Dataset
+
     def __init__(self, db_context: DbContext) -> None:
         super().__init__(db_context)
 

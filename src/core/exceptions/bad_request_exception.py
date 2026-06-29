@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from src.application.common.exceptions.app_exception import AppException
+from src.core.exceptions.app_exception import AppException
 
 
 class BadRequestException(AppException):
