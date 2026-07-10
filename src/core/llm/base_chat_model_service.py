@@ -1,7 +1,5 @@
-from abc import ABC, abstractmethod
+from src.core.contracts.services.i_chat_model_service import IChatModelService
 
 
-class BaseChatModelService(ABC):
-    @abstractmethod
-    async def generate(self, prompt: str) -> str:
-        raise NotImplementedError
+class BaseChatModelService(IChatModelService):
+    pass

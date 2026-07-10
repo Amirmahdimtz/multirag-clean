@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from src.application.common.controllers.base_controller import BaseController
 from src.application.common.dtos.base_response_dto import BaseResponseDto
@@ -7,17 +7,28 @@ from src.application.user.dtos.create_user_request_dto import (
 )
 from src.core.user.user_business import UserBusiness
 from src.application.user.dtos.user_response_dto import UserResponseDto
+from src.application.security.api_key_dependencies import ApiKeyDependencies
 
 
 class UserController(BaseController):
-    route_prefix = "/users"
+    route_prefix = "/admin/users"
 
-    def __init__(self, user_business: UserBusiness) -> None:
+    def __init__(
+        self,
+        user_business: UserBusiness,
+        api_key_dependencies: ApiKeyDependencies,
+    ) -> None:
         self.user_business = user_business
+        self.api_key_dependencies = api_key_dependencies
 
     def api(self) -> APIRouter:
         router = APIRouter(
+            prefix="",
             tags=["Users"],
+            dependencies=[
+                Depends(self.api_key_dependencies.require_admin_api_key),
+            ],
+            responses={404: {"description": "Not found"}},
         )
 
         @router.post("/")

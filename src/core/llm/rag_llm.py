@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import AsyncGenerator, List, Optional
 
 from src.core.llm.base_llm import BaseLLM
 
@@ -16,25 +16,49 @@ class RAGLLM(BaseLLM):
 
         return await self.chat_model_service.generate(prompt)
 
+    async def stream(
+        self,
+        question: str,
+        contexts: Optional[List[str]] = None,
+    ) -> AsyncGenerator[str, None]:
+        prompt = self.__build_prompt(
+            question=question,
+            contexts=contexts or [],
+        )
+
+        async for token in self.chat_model_service.stream(prompt):
+            yield token
+
     def __build_prompt(
         self,
         question: str,
         contexts: List[str],
     ) -> str:
-        joined_contexts = "\n\n---\n\n".join(contexts)
+        joined_contexts = "\n\n".join(contexts).strip()
+
+        if not joined_contexts:
+            joined_contexts = "NO_CONTEXT_PROVIDED"
 
         return f"""
-You are a retrieval-augmented assistant.
+You are a retrieval-augmented generation assistant.
 
-Use ONLY the provided context to answer the question.
-If the answer is not available in the context, say:
-"I could not find the answer in the provided documents."
+Your task:
+- Answer the user's question using ONLY the provided retrieved context.
+- Do not use outside knowledge.
+- Do not invent facts, names, numbers, dates, URLs, or explanations.
+- If the answer is not clearly available in the context, say in Persian:
+"پاسخ این سؤال در اسناد بازیابی‌شده پیدا نشد."
+- If the question is in Persian, answer in Persian.
+- If the question is in English, answer in English.
+- Keep the answer clear and concise.
+- When useful, mention the relevant chunk references like [chunk: 3].
+- Do not mention similarity scores unless the user asks.
 
-CONTEXT:
+Retrieved context:
 {joined_contexts}
 
-QUESTION:
+User question:
 {question}
 
-ANSWER:
+Final answer:
 """.strip()

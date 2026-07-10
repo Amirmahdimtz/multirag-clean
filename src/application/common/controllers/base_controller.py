@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import ClassVar
 
 from fastapi import APIRouter
 
 
 class BaseController(ABC):
-    route_prefix: str = ""
+    route_prefix: ClassVar[str] = ""
 
     @abstractmethod
     def api(self) -> APIRouter:

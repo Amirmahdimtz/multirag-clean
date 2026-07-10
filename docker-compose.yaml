@@ -1,0 +1,163 @@
+name: "${COMPOSE_PROJECT_NAME:-multirag}"
+
+services:
+  postgres:
+    image: "${PGVECTOR_IMAGE:-pgvector/pgvector:0.8.5-pg16-bookworm}"
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:?POSTGRES_DB must be set}"
+      POSTGRES_USER: "${POSTGRES_USER:?POSTGRES_USER must be set}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    stop_grace_period: 60s
+
+  vllm:
+    image: "${VLLM_IMAGE:?VLLM_IMAGE must be set to a tested vLLM image tag or digest}"
+    restart: unless-stopped
+    environment:
+      HF_TOKEN: "${HF_TOKEN:-}"
+      VLLM_API_KEY: "${VLLM_API_KEY:?VLLM_API_KEY must be set}"
+      VLLM_ENABLE_CUDA_COMPATIBILITY: "${VLLM_ENABLE_CUDA_COMPATIBILITY:-1}"
+    command:
+      - --model
+      - "${VLLM_MODEL:?VLLM_MODEL must be set}"
+      - --served-model-name
+      - "${VLLM_SERVED_MODEL_NAME:?VLLM_SERVED_MODEL_NAME must be set}"
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --dtype
+      - "${VLLM_DTYPE:-auto}"
+      - --tensor-parallel-size
+      - "${VLLM_TENSOR_PARALLEL_SIZE:-1}"
+      - --gpu-memory-utilization
+      - "${VLLM_GPU_MEMORY_UTILIZATION:-0.90}"
+      - --max-model-len
+      - "${VLLM_MAX_MODEL_LEN:-16384}"
+      - --limit-mm-per-prompt
+      - "image=0,audio=0"
+    expose:
+      - "8000"
+    volumes:
+      - vllm_model_cache:/root/.cache/huggingface
+    networks:
+      - backend
+    shm_size: "${VLLM_SHM_SIZE:-16gb}"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 600s
+    stop_grace_period: 120s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "${MULTIRAG_APP_IMAGE:-multirag-clean:production}"
+    restart: unless-stopped
+    init: true
+    environment:
+      MULTIRAG_APPLICATION_HOST: 0.0.0.0
+      MULTIRAG_APPLICATION_PORT: 8000
+      MULTIRAG_DATABASE_URL: "${MULTIRAG_DATABASE_URL:?MULTIRAG_DATABASE_URL must be set}"
+      MULTIRAG_DATABASE_ECHO_SQL: "${MULTIRAG_DATABASE_ECHO_SQL:-false}"
+      MULTIRAG_DATABASE_POOL_SIZE: "${MULTIRAG_DATABASE_POOL_SIZE:-10}"
+      MULTIRAG_DATABASE_MAX_OVERFLOW: "${MULTIRAG_DATABASE_MAX_OVERFLOW:-20}"
+      MULTIRAG_DATABASE_POOL_PRE_PING: "${MULTIRAG_DATABASE_POOL_PRE_PING:-true}"
+      MULTIRAG_DATABASE_POOL_RECYCLE_SECONDS: "${MULTIRAG_DATABASE_POOL_RECYCLE_SECONDS:-1800}"
+      MULTIRAG_SECURITY_ENABLED: "${MULTIRAG_SECURITY_ENABLED:-true}"
+      MULTIRAG_ADMIN_API_KEYS: "${MULTIRAG_ADMIN_API_KEYS:?MULTIRAG_ADMIN_API_KEYS must be set}"
+      MULTIRAG_USER_API_KEYS: "${MULTIRAG_USER_API_KEYS:?MULTIRAG_USER_API_KEYS must be set}"
+      MULTIRAG_STORAGE_BASE_PATH: /app/storage
+      MULTIRAG_VECTOR_STORE_PROVIDER: pgvector
+      MULTIRAG_PGVECTOR_TABLE_PREFIX: "${MULTIRAG_PGVECTOR_TABLE_PREFIX:-multirag_dataset}"
+      MULTIRAG_PGVECTOR_VECTOR_SIZE: "${MULTIRAG_PGVECTOR_VECTOR_SIZE:-1024}"
+      MULTIRAG_PGVECTOR_BATCH_SIZE: "${MULTIRAG_PGVECTOR_BATCH_SIZE:-10}"
+      MULTIRAG_PGVECTOR_HNSW_ENABLED: "${MULTIRAG_PGVECTOR_HNSW_ENABLED:-true}"
+      MULTIRAG_LLM_PROVIDER: vllm
+      MULTIRAG_LLM_BASE_URL: http://vllm:8000/v1
+      MULTIRAG_LLM_API_KEY: "${VLLM_API_KEY:?VLLM_API_KEY must be set}"
+      MULTIRAG_LLM_MODEL: "${VLLM_SERVED_MODEL_NAME:?VLLM_SERVED_MODEL_NAME must be set}"
+      MULTIRAG_LLM_TEMPERATURE: "${MULTIRAG_LLM_TEMPERATURE:-1.0}"
+      MULTIRAG_LLM_MAX_TOKENS: "${MULTIRAG_LLM_MAX_TOKENS:-1024}"
+      MULTIRAG_LLM_TOP_P: "${MULTIRAG_LLM_TOP_P:-0.95}"
+      MULTIRAG_LLM_TOP_K: "${MULTIRAG_LLM_TOP_K:-64}"
+      MULTIRAG_LLM_TIMEOUT_SECONDS: "${MULTIRAG_LLM_TIMEOUT_SECONDS:-180}"
+      MULTIRAG_EMBEDDING_PROVIDER: "${MULTIRAG_EMBEDDING_PROVIDER:-jina}"
+      MULTIRAG_EMBEDDING_MODEL: "${MULTIRAG_EMBEDDING_MODEL:-jinaai/jina-embeddings-v3}"
+      MULTIRAG_EMBEDDING_VECTOR_SIZE: "${MULTIRAG_EMBEDDING_VECTOR_SIZE:-1024}"
+      MULTIRAG_EMBEDDING_DEVICE: cpu
+      MULTIRAG_EMBEDDING_OFFLINE: "${MULTIRAG_EMBEDDING_OFFLINE:-false}"
+      MULTIRAG_EMBEDDING_LOCAL_PATH: "${MULTIRAG_EMBEDDING_LOCAL_PATH:-null}"
+      MULTIRAG_EMBEDDING_NORMALIZE: "${MULTIRAG_EMBEDDING_NORMALIZE:-false}"
+      MULTIRAG_RAG_K_RETRIEVAL: "${MULTIRAG_RAG_K_RETRIEVAL:-5}"
+      MULTIRAG_RAG_SCORE_THRESHOLD: "${MULTIRAG_RAG_SCORE_THRESHOLD:-0.5}"
+      MULTIRAG_UPLOAD_MAX_FILE_SIZE_MB: "${MULTIRAG_UPLOAD_MAX_FILE_SIZE_MB:-50}"
+      MULTIRAG_UPLOAD_ALLOWED_EXTENSIONS: "${MULTIRAG_UPLOAD_ALLOWED_EXTENSIONS:-[\"pdf\",\"docx\",\"txt\",\"csv\"]}"
+      MULTIRAG_CHUNK_SIZE: "${MULTIRAG_CHUNK_SIZE:-1000}"
+      MULTIRAG_CHUNK_OVERLAP: "${MULTIRAG_CHUNK_OVERLAP:-150}"
+      HF_HOME: /models/embedding
+      TORCH_HOME: /models/torch
+    ports:
+      - "${MULTIRAG_PUBLIC_PORT:-2011}:8000"
+    volumes:
+      - uploads_data:/app/storage
+      - embedding_model_cache:/models
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      vllm:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/', timeout=5)
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 300s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    stop_grace_period: 30s
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploads_data:
+  vllm_model_cache:
+  embedding_model_cache:

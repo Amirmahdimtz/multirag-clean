@@ -1,0 +1,4 @@
+﻿This is a test RAG document.
+MultiRAG is a system for retrieval augmented generation.
+User access to RAG systems must be protected.
+Only authorized users should be able to use a RAG system.

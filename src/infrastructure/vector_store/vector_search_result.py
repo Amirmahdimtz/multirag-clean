@@ -1,9 +1,3 @@
-from dataclasses import dataclass
+from src.domain.models.vector_search_result import VectorSearchResult
 
-from src.domain.models.vector_document import VectorDocument
-
-
-@dataclass
-class VectorSearchResult:
-    document: VectorDocument
-    score: float
+__all__ = ["VectorSearchResult"]

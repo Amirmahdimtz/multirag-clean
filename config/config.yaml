@@ -1,9 +1,74 @@
 application:
   name: "MultiRAG Clean"
   version: "0.1.0"
-  host: "127.0.0.1"
-  port: 8000
+  host: "${MULTIRAG_APPLICATION_HOST:127.0.0.1}"
+  port: "${MULTIRAG_APPLICATION_PORT:8000}"
   api_prefix: "/api/v1"
 
 database:
-  url: "sqlite+aiosqlite:///./test.db"
+  url: "${MULTIRAG_DATABASE_URL:sqlite+aiosqlite:///./test.db}"
+  echo_sql: "${MULTIRAG_DATABASE_ECHO_SQL:false}"
+  pool_size: "${MULTIRAG_DATABASE_POOL_SIZE:10}"
+  max_overflow: "${MULTIRAG_DATABASE_MAX_OVERFLOW:20}"
+  pool_pre_ping: "${MULTIRAG_DATABASE_POOL_PRE_PING:true}"
+  pool_recycle_seconds: "${MULTIRAG_DATABASE_POOL_RECYCLE_SECONDS:1800}"
+
+security:
+  enabled: "${MULTIRAG_SECURITY_ENABLED:true}"
+  admin_api_keys: "${MULTIRAG_ADMIN_API_KEYS:[]}"
+  user_api_keys: "${MULTIRAG_USER_API_KEYS:[]}"
+
+storage:
+  base_path: "${MULTIRAG_STORAGE_BASE_PATH:storage}"
+
+uploads:
+  max_file_size_mb: "${MULTIRAG_UPLOAD_MAX_FILE_SIZE_MB:50}"
+
+  allowed_extensions: '${MULTIRAG_UPLOAD_ALLOWED_EXTENSIONS:["pdf","docx","txt","csv"]}'
+
+document_processing:
+  chunk_size: "${MULTIRAG_CHUNK_SIZE:1000}"
+  chunk_overlap: "${MULTIRAG_CHUNK_OVERLAP:150}"
+
+rag:
+  k_retrieval: "${MULTIRAG_RAG_K_RETRIEVAL:5}"
+  score_threshold: "${MULTIRAG_RAG_SCORE_THRESHOLD:0.5}"
+
+embedding:
+  provider: "${MULTIRAG_EMBEDDING_PROVIDER:fake}"
+  dimension: "${MULTIRAG_EMBEDDING_FAKE_DIMENSION:128}"
+
+  jina:
+    model_name: "${MULTIRAG_EMBEDDING_MODEL:jinaai/jina-embeddings-v3}"
+    vector_size: "${MULTIRAG_EMBEDDING_VECTOR_SIZE:1024}"
+    offline: "${MULTIRAG_EMBEDDING_OFFLINE:false}"
+    local_model_path: "${MULTIRAG_EMBEDDING_LOCAL_PATH:null}"
+    normalize_embeddings: "${MULTIRAG_EMBEDDING_NORMALIZE:false}"
+    device: "${MULTIRAG_EMBEDDING_DEVICE:cpu}"
+
+vector_store:
+  provider: "${MULTIRAG_VECTOR_STORE_PROVIDER:sqlite_json}"
+
+  sqlite_json:
+    enabled: true
+
+  pgvector:
+    table_prefix: "${MULTIRAG_PGVECTOR_TABLE_PREFIX:vector_db_dataset_id}"
+    vector_size: "${MULTIRAG_PGVECTOR_VECTOR_SIZE:1024}"
+    batch_size: "${MULTIRAG_PGVECTOR_BATCH_SIZE:10}"
+
+    hnsw:
+      enabled: "${MULTIRAG_PGVECTOR_HNSW_ENABLED:true}"
+
+llm:
+  provider: "${MULTIRAG_LLM_PROVIDER:fake}"
+
+  vllm:
+    model: "${MULTIRAG_LLM_MODEL}"
+    base_url: "${MULTIRAG_LLM_BASE_URL:http://localhost:8000/v1}"
+    api_key: "${MULTIRAG_LLM_API_KEY}"
+    temperature: "${MULTIRAG_LLM_TEMPERATURE:1.0}"
+    max_tokens: "${MULTIRAG_LLM_MAX_TOKENS:1024}"
+    top_p: "${MULTIRAG_LLM_TOP_P:0.95}"
+    top_k: "${MULTIRAG_LLM_TOP_K:64}"
+    timeout_seconds: "${MULTIRAG_LLM_TIMEOUT_SECONDS:180}"

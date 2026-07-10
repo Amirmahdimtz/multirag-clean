@@ -30,8 +30,8 @@ class WebService:
         self.db_context = db_context
 
         self.app = FastAPI(
-            title=self.config_reader.get("application.name", "MultiRAG Clean"),
-            version=self.config_reader.get("application.version", "0.1.0"),
+            title=self.config_reader.require("application.name"),
+            version=self.config_reader.require("application.version"),
         )
 
         self.__register_exception_handlers()
@@ -59,16 +59,37 @@ class WebService:
         )
 
     def __register_controllers(self) -> None:
-        api_prefix = self.config_reader.get(
-            "application.api_prefix",
-            "/api/v1",
-        )
+        api_prefix = self.config_reader.require("application.api_prefix")
+        api_prefix = self.__normalize_prefix(api_prefix)
+
+        registered_prefixes: set[str] = set()
 
         for controller in self.controllers:
+            route_prefix = self.__normalize_prefix(controller.route_prefix)
+            full_prefix = f"{api_prefix}{route_prefix}"
+
+            if full_prefix in registered_prefixes:
+                raise ValueError(
+                    f"Duplicate controller route prefix detected: {full_prefix}"
+                )
+
+            registered_prefixes.add(full_prefix)
+
             self.app.include_router(
                 controller.api(),
-                prefix=f"{api_prefix}{controller.route_prefix}",
+                prefix=full_prefix,
             )
+
+    def __normalize_prefix(self, prefix: str) -> str:
+        if not prefix:
+            return ""
+
+        normalized = prefix.strip()
+
+        if not normalized.startswith("/"):
+            normalized = f"/{normalized}"
+
+        return normalized.rstrip("/")
 
     async def init_database(self) -> None:
 
@@ -77,12 +98,10 @@ class WebService:
     def start(self) -> None:
         host = self.config_reader.get(
             "application.host",
-            "127.0.0.1"
         )
         port = int(
             self.config_reader.get(
                 "application.port",
-                8000,
             )
         )
 

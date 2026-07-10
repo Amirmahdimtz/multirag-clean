@@ -1,3 +1,5 @@
+import csv
+
 from pathlib import Path
 
 from docx import Document
@@ -37,3 +39,95 @@ class TextExtractor:
         document = Document(str(path))
         paragraphs = [paragraph.text for paragraph in document.paragraphs]
         return "\n".join(paragraphs)
+
+    def extract_csv_rows(
+        self,
+        file_path: str,
+    ) -> list[tuple[str, str, int]]:
+
+        path = Path(file_path)
+
+        with path.open(
+            mode="r",
+            encoding="utf-8-sig",
+            newline="",
+        ) as file:
+
+            reader = csv.DictReader(file)
+
+            if reader.fieldnames is None:
+                raise ValueError(
+                    "CSV file does not contain a header row."
+                )
+
+            normalized_columns = {
+                column.strip().lower(): column
+                for column in reader.fieldnames
+            }
+
+            required_columns = {
+                "question",
+                "answer",
+            }
+
+            missing_columns = (
+                required_columns
+                - set(normalized_columns)
+            )
+
+            if missing_columns:
+                raise ValueError(
+                    "CSV file must contain "
+                    "'question' and 'answer' columns."
+                )
+
+            question_column = normalized_columns[
+                "question"
+            ]
+
+            answer_column = normalized_columns[
+                "answer"
+            ]
+
+            rows: list[
+                tuple[str, str, int]
+            ] = []
+
+            for row_number, row in enumerate(
+                reader,
+                start=2,
+            ):
+
+                question = (
+                    row.get(question_column)
+                    or ""
+                ).strip()
+
+                answer = (
+                    row.get(answer_column)
+                    or ""
+                ).strip()
+
+                if not question and not answer:
+                    continue
+
+                if not question:
+                    raise ValueError(
+                        f"Question is empty at CSV "
+                        f"row {row_number}."
+                    )
+
+                rows.append(
+                    (
+                        question,
+                        answer,
+                        row_number,
+                    )
+                )
+
+        if not rows:
+            raise ValueError(
+                "CSV file does not contain any valid data."
+            )
+
+        return rows

@@ -1,12 +1,15 @@
-# Virtual environment
+# Virtual environments
 venv/
+.venv/
+env/
 
 # Local database
 *.db
 test.db
 
 # Storage / uploads / logs / generated files
-storage/
+/storage/
+/models/
 
 # Python cache
 __pycache__/
@@ -28,3 +31,10 @@ Thumbs.db
 
 # VS Code local settings
 .vscode/
+.idea/
+
+# Local archives and accidental terminal-command files
+*.zip
+*.tar
+*.tar.gz
+s -ExecutionPolicy*

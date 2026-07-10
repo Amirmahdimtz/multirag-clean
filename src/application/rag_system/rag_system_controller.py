@@ -1,9 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, Query, status
 
 from src.application.common.controllers.base_controller import BaseController
 from src.application.common.dtos.base_response_dto import BaseResponseDto
+from src.application.security.api_key_dependencies import ApiKeyDependencies
 from src.core.rag_system.rag_system_business import RAGSystemBusiness
 from src.application.rag_system.dtos.create_rag_system_request_dto import (
     CreateRAGSystemRequestDto,
@@ -38,15 +39,23 @@ from src.application.rag_system.dtos.rag_answer_context_dto import (
 
 
 class RAGSystemController(BaseController):
-    route_prefix = "/rag-systems"
+    route_prefix = "/admin/rag-systems"
 
-    def __init__(self, rag_system_business: RAGSystemBusiness) -> None:
+    def __init__(
+        self,
+        rag_system_business: RAGSystemBusiness,
+        api_key_dependencies: ApiKeyDependencies,
+    ) -> None:
         self.rag_system_business = rag_system_business
+        self.api_key_dependencies = api_key_dependencies
 
     def api(self) -> APIRouter:
         router = APIRouter(
             prefix="",
             tags=["RAG Systems"],
+            dependencies=[
+                Depends(self.api_key_dependencies.require_admin_api_key),
+            ],
             responses={404: {"description": "Not found"}},
         )
 
@@ -125,12 +134,22 @@ class RAGSystemController(BaseController):
         async def search_rag_system(
             rag_system_id: UUID,
             query: str,
-            limit: int = 5,
+            limit: int | None = Query(
+                default=None,
+                ge=1,
+                le=20,
+            ),
+            score_threshold: float | None = Query(
+                default=None,
+                ge=0,
+                le=1,
+            ),
         ) -> RAGSearchResponseDto:
             results = await self.rag_system_business.search(
                 rag_system_id=rag_system_id,
                 query=query,
                 limit=limit,
+                score_threshold=score_threshold,
             )
 
             return RAGSearchResponseDto(
@@ -158,6 +177,7 @@ class RAGSystemController(BaseController):
                 rag_system_id=rag_system_id,
                 question=dto.question,
                 limit=dto.limit,
+                score_threshold=dto.score_threshold,
             )
 
             return AskRAGSystemResponseDto(
@@ -167,8 +187,8 @@ class RAGSystemController(BaseController):
                     answer=result.answer,
                     contexts=[
                         RAGAnswerContextDto(
-                            chunk_index=context.document.chunk_index,
-                            content=context.document.content,
+                            chunk_index=context.chunk_index,
+                            content=context.content,
                             score=context.score,
                         )
                         for context in result.contexts

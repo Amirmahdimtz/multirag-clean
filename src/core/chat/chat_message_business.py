@@ -3,12 +3,15 @@ from uuid import UUID
 
 from src.domain.models.chat_message import ChatMessage
 from src.domain.enums.message_role import MessageRole
+from src.core.contracts.repositories.i_chat_message_repository import (
+    IChatMessageRepository,
+)
 
 
 class ChatMessageBusiness:
     def __init__(
         self,
-        chat_message_repository,
+        chat_message_repository: IChatMessageRepository,
     ) -> None:
         self.chat_message_repository = chat_message_repository
 
@@ -26,7 +29,13 @@ class ChatMessageBusiness:
 
         return await self.chat_message_repository.add(message)
 
-    async def get_session_messages(self, session_id: UUID) -> List[ChatMessage]:
+    async def get_session_messages(
+        self,
+        session_id: UUID,
+    ) -> List[ChatMessage]:
         return await self.chat_message_repository.get_by_session_id(
             session_id,
         )
+
+    async def delete_session_messages(self, session_id: UUID) -> None:
+        await self.chat_message_repository.delete_by_session_id(session_id)

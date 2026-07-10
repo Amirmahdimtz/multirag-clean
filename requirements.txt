@@ -10,3 +10,12 @@ aiosqlite
 python-multipart
 pypdf
 python-docx
+langchain==0.3.25
+langchain-core==0.3.65
+openai==2.45.0
+langchain-huggingface==0.3.0
+sentence-transformers==4.1.0
+torch==2.6.0
+einops==0.8.1
+langchain-postgres==0.0.15
+psycopg[binary,pool]==3.2.9

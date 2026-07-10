@@ -1,0 +1,18 @@
+[Unit]
+Description=MultiRAG Docker Compose stack
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/multirag
+ExecStart=/usr/bin/docker compose --env-file .env up -d --remove-orphans
+ExecReload=/usr/bin/docker compose --env-file .env up -d --build --remove-orphans
+ExecStop=/usr/bin/docker compose --env-file .env down
+TimeoutStartSec=0
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

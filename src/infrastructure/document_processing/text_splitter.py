@@ -3,9 +3,9 @@ from typing import List
 
 class TextSplitter:
     def __init__(
-            self,
-            chunk_size: int = 1000,
-            chunk_overlap: int = 150,
+        self,
+        chunk_size: int,
+        chunk_overlap: int,
     ) -> None:
         if chunk_overlap >= chunk_size:
             raise ValueError("chunk_overlap must be smaller than chunk_size")

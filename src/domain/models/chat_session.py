@@ -42,6 +42,13 @@ class ChatSession(BaseEntity):
         index=True,
     )
 
+    user_dataset_id: Mapped[Optional[UUID]] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey("datasets.id"),
+        nullable=True,
+        index=True,
+    )
+
     last_active_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
@@ -54,6 +61,7 @@ class ChatSession(BaseEntity):
         name: str,
         llm_type: LLMType,
         rag_system_id: Optional[UUID] = None,
+        user_dataset_id: Optional[UUID] = None,
     ) -> None:
         super().__init__()
 
@@ -61,6 +69,7 @@ class ChatSession(BaseEntity):
         self.name = name
         self.llm_type = llm_type
         self.rag_system_id = rag_system_id
+        self.user_dataset_id = user_dataset_id
         self.last_active_at = datetime.now(timezone.utc)
 
     def mark_as_active(self) -> None:

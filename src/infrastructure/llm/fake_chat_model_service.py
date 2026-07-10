@@ -1,22 +1,21 @@
-from src.core.llm.base_chat_model_service import BaseChatModelService
+import asyncio
+from typing import AsyncGenerator
+
+from src.core.contracts.services.i_chat_model_service import IChatModelService
 
 
-class FakeChatModelService(BaseChatModelService):
+class FakeChatModelService(IChatModelService):
     async def generate(self, prompt: str) -> str:
-        context_marker = "CONTEXT:"
-        question_marker = "QUESTION:"
-
-        if context_marker in prompt and question_marker in prompt:
-            question = prompt.split(question_marker, 1)[1].strip()
-
-            return (
-                "این پاسخ توسط FakeChatModelService تولید شده است.\n\n"
-                "بر اساس متن‌های بازیابی‌شده، پاسخ پیشنهادی برای سؤال شما این است:\n"
-                f"{question}\n\n"
-                "نکته: در جلسه‌های بعدی این سرویس را با LLM واقعی مثل Ollama جایگزین می‌کنیم."
-            )
-
         return (
-            "این پاسخ ساده توسط FakeChatModelService تولید شده است.\n"
+            "این پاسخ توسط FakeChatModelService تولید شده است.\n\n"
+            "این نسخه فقط برای تست معماری Streaming است و بعداً با LLM واقعی "
+            "مثل Ollama یا OpenAI جایگزین می‌شود.\n\n"
             f"Prompt received:\n{prompt[:500]}"
         )
+
+    async def stream(self, prompt: str) -> AsyncGenerator[str, None]:
+        response = await self.generate(prompt)
+
+        for word in response.split():
+            yield word + " "
+            await asyncio.sleep(0.05)
