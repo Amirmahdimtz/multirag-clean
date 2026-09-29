@@ -26,13 +26,20 @@ For local configuration and service startup, follow the repository README.
 
 ## Tests
 
-Run the core unit test suite from the repository root:
+Run the deterministic test suite from the repository root:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-The CI workflow also compiles the Python source tree before running these tests.
+Before opening a pull request, also run the same static lint gate used by CI:
+
+```bash
+python -m pip install "ruff>=0.8,<1"
+python -m ruff check src tests main.py
+```
+
+See [docs/testing.md](docs/testing.md) for the current testing strategy.
 
 ## Pull requests
 
