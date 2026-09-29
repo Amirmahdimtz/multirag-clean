@@ -30,7 +30,8 @@ jobs:
           python -m pip install \
             "PyYAML>=6.0,<7" \
             "SQLAlchemy>=2.0,<3" \
-            "aiosqlite>=0.20,<1"
+            "aiosqlite>=0.20,<1" \
+            "alembic==1.20.0"
 
       - name: Verify installed dependencies
         run: python -m pip check
