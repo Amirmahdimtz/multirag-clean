@@ -5,6 +5,7 @@ dependency-injector==4.48.1
 pyyaml
 pydantic
 sqlalchemy
+alembic==1.20.0
 asyncpg
 aiosqlite
 python-multipart
