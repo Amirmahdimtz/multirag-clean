@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Amirmahdimtz/multirag-clean/security/policy
+    about: Please use the security policy instead of a public bug report.
+  - name: Support and usage questions
+    url: https://github.com/Amirmahdimtz/multirag-clean/blob/main/SUPPORT.md
+    about: Check the support guidance before opening a bug report.
