@@ -9,7 +9,10 @@ The project follows semantic versioning once tagged releases begin.
 ### Added
 
 - Versioned Alembic database migrations with CI drift validation.
-- Ruff correctness linting for source, tests, and migration code.
+- Ruff static linting as part of the required CI test job.
+- Security-model and testing-strategy documentation.
+- Explicit pre-1.0 security support policy.
+
 - Authorization tests for user dataset ownership and RAG access rules.
 - Maintainer governance, community conduct, and repository editor configuration.
 - Issue intake links for security and support guidance.

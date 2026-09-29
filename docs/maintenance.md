@@ -11,7 +11,7 @@ Before merge:
 2. Add or update tests for behavior changes.
 3. Update documentation for API, configuration, deployment, or operational
    changes.
-4. Verify required CI, Ruff, and CodeQL checks.
+4. Verify required CI and CodeQL checks.
 5. For persistent schema changes, verify the Alembic revision and run
    `alembic check`.
 6. Confirm that no secrets, local databases, generated files, or credentials

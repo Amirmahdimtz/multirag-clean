@@ -6,7 +6,7 @@ Items may change as real users and contributors surface new requirements.
 ## Completed foundations
 
 - versioned Alembic database migrations with CI drift validation;
-- CodeQL scanning, correctness linting, and protected-branch checks;
+- CodeQL scanning, Ruff linting, and protected-branch checks;
 - Dependabot, CODEOWNERS, contributor/security/support policies, and releases.
 
 ## Current priorities

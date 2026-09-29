@@ -142,16 +142,15 @@ virtual environment.
 
 ## Development checks
 
-Run the lightweight core unit test suite from the repository root:
+Run the deterministic test suite from the repository root:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
-ruff check src tests alembic
 ```
 
-GitHub Actions also runs correctness-focused Ruff checks, compiles `src/`,
-`tests/`, and `alembic/`, and runs the test suite for pull requests and
-pushes to `main`.
+CI also runs Ruff static linting and compiles Python sources before executing
+the tests. See [docs/testing.md](docs/testing.md) for the current test scope and
+production-validation boundaries.
 
 Database migrations are versioned with Alembic. With
 `MULTIRAG_DATABASE_URL` configured for a disposable development database:
@@ -443,7 +442,8 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
 development and pull-request workflow.
 
 Please do not report suspected vulnerabilities in a public issue. Follow
-[SECURITY.md](SECURITY.md) for the security reporting process.
+[SECURITY.md](SECURITY.md) for the security reporting process and
+[docs/security-model.md](docs/security-model.md) for trust boundaries and deployment assumptions.
 
 ## Production checklist
 
