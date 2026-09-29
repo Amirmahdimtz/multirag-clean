@@ -7,8 +7,9 @@ download, PostgreSQL server, or external LLM service.
 
 The protected `main` branch requires:
 
-- `tests`: compilation, linting, dependency consistency checks, and the
-  deterministic unit/integration test suite;
+- `tests`: compilation, linting, dependency consistency checks, branch-aware
+  coverage reporting, the deterministic unit/integration test suite, and
+  Docker Compose configuration validation;
 - `Analyze Python`: CodeQL analysis.
 
 Pull requests cannot merge until those required checks pass.
