@@ -2,6 +2,7 @@
 
 ![CI](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/ci.yml/badge.svg)
 ![CodeQL](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/codeql.yml/badge.svg)
+![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Amirmahdimtz/multirag-clean/badge)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Release](https://img.shields.io/github/v/release/Amirmahdimtz/multirag-clean)
@@ -421,6 +422,10 @@ The rewrite preserves the original project's main operational goals while
 changing the internal architecture to the company's layered Dependency
 Injection style.
 
+## Citation
+
+Software citation metadata is available in [CITATION.cff](CITATION.cff).
+
 ## Releases
 
 The latest tagged release is [v0.1.0](https://github.com/Amirmahdimtz/multirag-clean/releases/tag/v0.1.0).
@@ -434,7 +439,7 @@ changes are recorded in [CHANGELOG.md](CHANGELOG.md), maintainer release checks
 are documented in [docs/maintenance.md](docs/maintenance.md), and usage/support
 guidance is available in [SUPPORT.md](SUPPORT.md). Governance and maintainer responsibilities are documented in [MAINTAINERS.md](MAINTAINERS.md), and community expectations are defined in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-Dependency updates are monitored with Dependabot, and CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence.
+Dependency updates are monitored with Dependabot. GitHub Actions used by the project are pinned to immutable commit SHAs, CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence, and OpenSSF Scorecard evaluates repository supply-chain practices.
 
 ## Contributing and security
 
