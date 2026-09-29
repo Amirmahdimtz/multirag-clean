@@ -8,13 +8,14 @@ The project follows semantic versioning once tagged releases begin.
 
 ### Added
 
+- Versioned Alembic database migrations with CI drift validation.
+- Ruff correctness linting for source, tests, and migration code.
 - Authorization tests for user dataset ownership and RAG access rules.
 - Maintainer governance, community conduct, and repository editor configuration.
 - Issue intake links for security and support guidance.
 
 ### Planned
 
-- versioned database migrations;
 - broader integration and authorization coverage.
 
 ## [0.1.0] - 2026-09-29
