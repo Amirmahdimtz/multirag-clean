@@ -11,8 +11,10 @@ Before merge:
 2. Add or update tests for behavior changes.
 3. Update documentation for API, configuration, deployment, or operational
    changes.
-4. Verify required CI and CodeQL checks.
-5. Confirm that no secrets, local databases, generated files, or credentials
+4. Verify required CI, Ruff, and CodeQL checks.
+5. For persistent schema changes, verify the Alembic revision and run
+   `alembic check`.
+6. Confirm that no secrets, local databases, generated files, or credentials
    are included.
 
 ## Releases
@@ -29,6 +31,21 @@ Before creating a version tag:
    release notes.
 
 Use semantic version tags such as `v0.1.0`.
+
+## Database migrations
+
+Every persistent schema change should be represented by an Alembic revision.
+Before deployment:
+
+1. back up the target database;
+2. test `alembic upgrade head` against a restored copy;
+3. verify `alembic check` reports no drift;
+4. test the documented downgrade path when rollback is expected;
+5. never use `alembic stamp` unless the existing schema was independently
+   verified to match the revision being stamped.
+
+The application may still call SQLAlchemy `create_all` for compatibility with
+local and existing flows, but schema evolution must be carried by migrations.
 
 ## Dependency updates
 

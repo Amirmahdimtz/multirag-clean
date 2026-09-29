@@ -3,30 +3,31 @@
 This roadmap describes maintenance priorities rather than fixed delivery dates.
 Items may change as real users and contributors surface new requirements.
 
+## Completed foundations
+
+- versioned Alembic database migrations with CI drift validation;
+- CodeQL scanning, Ruff linting, and protected-branch checks;
+- Dependabot, CODEOWNERS, contributor/security/support policies, and releases.
+
 ## Current priorities
 
-### 1. Versioned database migrations
-
-Replace metadata-only schema evolution with a documented Alembic workflow for
-upgrade and rollback. Tracked in issue #2.
-
-### 2. Broader integration coverage
+### 1. Broader integration coverage
 
 Automate the deterministic local RAG workflow with SQLite and fake providers,
 including authorization and failure paths. Tracked in issue #3.
 
-### 3. Dependency and supply-chain hygiene
+### 2. Dependency and supply-chain hygiene
 
 Keep Python, GitHub Actions, and container dependencies current through
 Dependabot and review update PRs before merging.
 
-### 4. Security automation
+### 3. Security automation
 
 Run CodeQL on pull requests, default-branch changes, and a scheduled cadence.
 Continue improving validation, secret handling, authorization boundaries, and
 security documentation.
 
-### 5. Release discipline
+### 4. Release discipline
 
 Use semantic version tags, maintain the changelog, verify CI before releases,
 and publish release notes that call out migrations or compatibility changes.
