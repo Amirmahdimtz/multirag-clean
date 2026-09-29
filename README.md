@@ -141,14 +141,15 @@ virtual environment.
 
 ## Development checks
 
-Run the lightweight core unit test suite from the repository root:
+Run the deterministic test suite from the repository root:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-GitHub Actions also compiles `src/` and `tests/` and runs these tests for
-pull requests and pushes to `main`.
+CI also runs Ruff static linting and compiles Python sources before executing
+the tests. See [docs/testing.md](docs/testing.md) for the current test scope and
+production-validation boundaries.
 
 ## Local execution
 
@@ -428,7 +429,8 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
 development and pull-request workflow.
 
 Please do not report suspected vulnerabilities in a public issue. Follow
-[SECURITY.md](SECURITY.md) for the security reporting process.
+[SECURITY.md](SECURITY.md) for the security reporting process and
+[docs/security-model.md](docs/security-model.md) for trust boundaries and deployment assumptions.
 
 ## Production checklist
 
