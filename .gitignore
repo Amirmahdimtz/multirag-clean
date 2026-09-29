@@ -16,6 +16,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Test / coverage artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
 # Environment variables / secrets
 .env
 .env.*
