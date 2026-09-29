@@ -24,6 +24,13 @@ pip install -r requirements.txt
 
 For local configuration and service startup, follow the repository README.
 
+For lightweight repository checks without installing the full production/GPU
+dependency stack, install the CI dependency set instead:
+
+```bash
+python -m pip install -r requirements-ci.txt
+```
+
 ## Tests
 
 After installing the development dependencies, run the same local quality gate
