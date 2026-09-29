@@ -30,6 +30,7 @@ Run the core unit test suite from the repository root:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
+ruff check src tests alembic
 ```
 
 The CI workflow also compiles the Python source tree before running these tests.
@@ -55,7 +56,7 @@ Keep changes focused and avoid unrelated refactors. A pull request should:
 - describe the implementation and any compatibility impact;
 - include or update tests when behavior changes;
 - update documentation when configuration, APIs, migrations, or deployment behavior changes;
-- ensure dependency review passes when changing package manifests;
+- ensure dependency changes are intentional and reviewed for security impact;
 - avoid committing generated files, local databases, credentials, tokens, or `.env` files.
 
 Use clear, descriptive commit messages. Prefer messages that describe the change, for example:
