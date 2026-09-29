@@ -22,7 +22,8 @@ The current unit tests cover focused behavior including:
 - text splitting;
 - file-storage behavior;
 - user dataset ownership boundaries;
-- RAG access authorization rules.
+- RAG access authorization rules;
+- migration upgrade, drift, and downgrade behavior.
 
 ## Deterministic integration coverage
 
@@ -40,6 +41,9 @@ upload
 
 This validates cross-layer behavior without depending on external model
 services.
+
+The migration test also upgrades a fresh SQLite database to Alembic `head`,
+runs `alembic check` to detect metadata drift, and downgrades back to `base`.
 
 ## Manual end-to-end path
 
