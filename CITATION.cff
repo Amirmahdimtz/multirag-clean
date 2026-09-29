@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use MultiRAG Clean in your work, please cite this software."
+title: "MultiRAG Clean"
+type: software
+authors:
+  - family-names: "Motazedi"
+    given-names: "Amirmahdi"
+repository-code: "https://github.com/Amirmahdimtz/multirag-clean"
+url: "https://github.com/Amirmahdimtz/multirag-clean"
+license: "Apache-2.0"
+version: "0.1.0"
+date-released: "2026-09-29"
+keywords:
+  - RAG
+  - FastAPI
+  - pgvector
+  - vLLM
+  - vector search
+  - retrieval augmented generation
