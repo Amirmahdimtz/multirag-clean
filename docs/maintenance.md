@@ -11,7 +11,7 @@ Before merge:
 2. Add or update tests for behavior changes.
 3. Update documentation for API, configuration, deployment, or operational
    changes.
-4. Verify required CI, Ruff, and CodeQL checks.
+4. Verify required CI, Ruff, and CodeQL checks; review Scorecard findings when they are relevant.
 5. For persistent schema changes, verify the Alembic revision and run
    `alembic check`.
 6. Confirm that no secrets, local databases, generated files, or credentials
@@ -46,6 +46,12 @@ Before deployment:
 
 The application may still call SQLAlchemy `create_all` for compatibility with
 local and existing flows, but schema evolution must be carried by migrations.
+
+## Workflow dependencies
+
+GitHub Actions should be pinned to immutable commit SHAs with a version comment.
+When Dependabot proposes an action update, review the upstream release and the
+resulting SHA change before merging.
 
 ## Dependency updates
 
