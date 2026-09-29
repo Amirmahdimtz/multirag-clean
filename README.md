@@ -1,5 +1,9 @@
 # MultiRAG Clean
 
+![CI](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
+
 MultiRAG Clean is a FastAPI service for managing users, datasets, vector search,
 RAG systems, access control, and streamed chat. It is a layered rewrite of the
 previous `multirag-main` project and uses `dependency_injector` to keep object
@@ -132,6 +136,17 @@ MULTIRAG_STORAGE_BASE_PATH=storage
 
 Do not commit or deliver the generated `.env`, `test.db`, `storage/`, or local
 virtual environment.
+
+## Development checks
+
+Run the lightweight core unit test suite from the repository root:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+GitHub Actions also compiles `src/` and `tests/` and runs these tests for
+pull requests and pushes to `main`.
 
 ## Local execution
 
@@ -390,6 +405,14 @@ The rewrite preserves the original project's main operational goals while
 changing the internal architecture to the company's layered Dependency
 Injection style.
 
+## Contributing and security
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+development and pull-request workflow.
+
+Please do not report suspected vulnerabilities in a public issue. Follow
+[SECURITY.md](SECURITY.md) for the security reporting process.
+
 ## Production checklist
 
 ### Configuration and secrets
@@ -449,4 +472,4 @@ documentation, and the intentionally included `rag-test.txt` smoke-test sample.
 
 ## License
 
-All rights reserved.
+MultiRAG Clean is licensed under the [Apache License 2.0](LICENSE).
