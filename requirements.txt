@@ -1,6 +1,6 @@
 fastapi==0.115.12
 uvicorn[standard]==0.34.2
-pydantic-settings==2.9.1
+pydantic-settings==2.15.0
 dependency-injector==4.48.1
 pyyaml
 pydantic
