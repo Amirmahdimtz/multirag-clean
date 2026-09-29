@@ -36,10 +36,23 @@ Before opening a pull request, also run the same static lint gate used by CI:
 
 ```bash
 python -m pip install "ruff>=0.8,<1"
-python -m ruff check src tests main.py
+python -m ruff check src tests alembic main.py
 ```
 
 See [docs/testing.md](docs/testing.md) for the current testing strategy.
+
+## Database migrations
+
+When a SQLAlchemy model change affects the persistent schema:
+
+1. update the model;
+2. create or edit the corresponding revision under `alembic/versions/`;
+3. run `alembic upgrade head` against a disposable database;
+4. run `alembic check` and confirm that no schema drift remains;
+5. document upgrade or rollback impact in the pull request.
+
+Do not use `alembic stamp` as a substitute for a migration on a database whose
+schema has not been independently verified.
 
 ## Pull requests
 
@@ -48,7 +61,7 @@ Keep changes focused and avoid unrelated refactors. A pull request should:
 - explain the problem being solved;
 - describe the implementation and any compatibility impact;
 - include or update tests when behavior changes;
-- update documentation when configuration, APIs, or deployment behavior changes;
+- update documentation when configuration, APIs, migrations, or deployment behavior changes;
 - avoid committing generated files, local databases, credentials, tokens, or `.env` files.
 
 Use clear, descriptive commit messages. Prefer messages that describe the change, for example:
