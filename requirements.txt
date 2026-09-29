@@ -18,5 +18,5 @@ langchain-huggingface==0.3.0
 sentence-transformers==4.1.0
 torch==2.6.0
 einops==0.8.1
-langchain-postgres==0.0.15
+langchain-postgres==0.0.18
 psycopg[binary,pool]==3.2.9
