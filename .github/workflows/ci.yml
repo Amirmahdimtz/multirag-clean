@@ -30,13 +30,17 @@ jobs:
           python -m pip install \
             "PyYAML>=6.0,<7" \
             "SQLAlchemy>=2.0,<3" \
-            "aiosqlite>=0.20,<1"
+            "aiosqlite>=0.20,<1" \
+            "ruff>=0.8,<1"
 
       - name: Verify installed dependencies
         run: python -m pip check
 
+      - name: Lint Python sources
+        run: python -m ruff check src tests main.py
+
       - name: Compile Python sources
-        run: python -m compileall -q src tests
+        run: python -m compileall -q src tests main.py
 
       - name: Run unit and integration tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
