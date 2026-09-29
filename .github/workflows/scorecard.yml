@@ -1,0 +1,40 @@
+name: OpenSSF Scorecard
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: "37 5 * * 3"
+  push:
+    branches:
+      - main
+
+permissions: read-all
+
+jobs:
+  analysis:
+    name: Scorecard
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Run OpenSSF Scorecard
+        uses: ossf/scorecard-action@v2.4.4
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload Scorecard results to code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results.sarif
