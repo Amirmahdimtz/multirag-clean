@@ -1,0 +1,10 @@
+# Default maintainer review ownership
+* @Amirmahdimtz
+
+# Security-sensitive and deployment surfaces
+/.github/ @Amirmahdimtz
+/deploy/ @Amirmahdimtz
+/docker-compose.yaml @Amirmahdimtz
+/Dockerfile @Amirmahdimtz
+/src/application/security/ @Amirmahdimtz
+/src/core/security/ @Amirmahdimtz
