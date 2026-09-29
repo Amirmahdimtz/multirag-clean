@@ -23,6 +23,7 @@ The current unit tests cover focused behavior including:
 - file-storage behavior;
 - user dataset ownership boundaries;
 - RAG access authorization rules;
+- deterministic fake embedding behavior and normalization;
 - migration upgrade, drift, and downgrade behavior.
 
 ## Deterministic integration coverage
