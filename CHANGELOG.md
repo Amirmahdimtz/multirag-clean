@@ -6,9 +6,15 @@ The project follows semantic versioning once tagged releases begin.
 
 ## Unreleased
 
+### Added
+
+- versioned Alembic database migrations and migration drift validation in CI;
+- dependency review for pull requests that change dependencies;
+- project code of conduct and guided issue creation;
+- repository-wide editor consistency defaults.
+
 ### Planned
 
-- versioned database migrations;
 - broader integration and authorization coverage.
 
 ## [0.1.0] - 2026-09-29
