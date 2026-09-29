@@ -9,7 +9,7 @@ The project follows semantic versioning once tagged releases begin.
 ### Added
 
 - versioned Alembic database migrations and migration drift validation in CI;
-- dependency review for pull requests that change dependencies;
+- Ruff correctness linting in CI;
 - project code of conduct and guided issue creation;
 - repository-wide editor consistency defaults.
 
