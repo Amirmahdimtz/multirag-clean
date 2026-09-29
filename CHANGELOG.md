@@ -8,6 +8,9 @@ The project follows semantic versioning once tagged releases begin.
 
 ### Added
 
+- Versioned Alembic database migrations with CI schema-drift validation.
+- Migration upgrade/downgrade coverage for a fresh SQLite database.
+
 - Ruff static linting as part of the required CI test job.
 - Security-model and testing-strategy documentation.
 - Explicit pre-1.0 security support policy.
@@ -18,7 +21,6 @@ The project follows semantic versioning once tagged releases begin.
 
 ### Planned
 
-- versioned database migrations;
 - broader integration and authorization coverage.
 
 ## [0.1.0] - 2026-09-29
