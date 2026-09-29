@@ -1,6 +1,6 @@
 # Contributing to MultiRAG Clean
 
-Thank you for considering a contribution.
+Thank you for considering a contribution. Participation is also subject to [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Development setup
 
@@ -57,3 +57,7 @@ docs: document production rollback procedure
 Use GitHub Issues for reproducible bugs and concrete feature proposals. Include enough context to reproduce the problem, but never include secrets, API keys, private data, or production credentials.
 
 For security vulnerabilities, follow `SECURITY.md` instead of opening a public issue.
+
+## Governance
+
+Maintainer responsibilities and decision-making expectations are documented in [MAINTAINERS.md](MAINTAINERS.md).

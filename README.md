@@ -418,10 +418,9 @@ Release checks and maintenance policy are documented in
 The public maintenance plan is tracked in [ROADMAP.md](ROADMAP.md). Notable
 changes are recorded in [CHANGELOG.md](CHANGELOG.md), maintainer release checks
 are documented in [docs/maintenance.md](docs/maintenance.md), and usage/support
-guidance is available in [SUPPORT.md](SUPPORT.md).
+guidance is available in [SUPPORT.md](SUPPORT.md). Governance and maintainer responsibilities are documented in [MAINTAINERS.md](MAINTAINERS.md), and community expectations are defined in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-Dependency updates are monitored with Dependabot, and CodeQL scans Python code
-on pull requests, default-branch changes, and a scheduled cadence.
+Dependency updates are monitored with Dependabot, and CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence.
 
 ## Contributing and security
 
