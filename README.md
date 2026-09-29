@@ -439,7 +439,7 @@ changes are recorded in [CHANGELOG.md](CHANGELOG.md), maintainer release checks
 are documented in [docs/maintenance.md](docs/maintenance.md), and usage/support
 guidance is available in [SUPPORT.md](SUPPORT.md). Governance and maintainer responsibilities are documented in [MAINTAINERS.md](MAINTAINERS.md), and community expectations are defined in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-Dependency updates are monitored with Dependabot, and CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence.
+Dependency updates are monitored with Dependabot. GitHub Actions used by the project are pinned to immutable commit SHAs, CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence, and OpenSSF Scorecard evaluates repository supply-chain practices.
 
 ## Contributing and security
 

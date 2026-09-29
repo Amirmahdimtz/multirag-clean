@@ -63,8 +63,11 @@ files are excluded from source control.
 
 ## Dependency and supply-chain controls
 
-Dependabot monitors supported dependency ecosystems. CodeQL analyzes Python
-code on pull requests, default-branch pushes, and a scheduled cadence.
+Dependabot monitors supported dependency ecosystems. GitHub Actions are pinned
+to immutable commit SHAs to reduce tag-retargeting risk. CodeQL analyzes Python
+code on pull requests, default-branch pushes, and a scheduled cadence. OpenSSF
+Scorecard runs on repository changes and a schedule and uploads SARIF results to
+GitHub code scanning.
 
 GitHub Dependency Review is tracked separately because it requires Dependency
 Graph to be enabled in repository settings before the workflow can operate.

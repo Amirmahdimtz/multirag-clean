@@ -8,6 +8,10 @@ The project follows semantic versioning once tagged releases begin.
 
 ### Added
 
+- OpenSSF Scorecard analysis with code-scanning upload.
+- CFF software citation metadata.
+- Deterministic embedding-service tests.
+
 - Versioned Alembic database migrations with CI schema-drift validation.
 - Migration upgrade/downgrade coverage for a fresh SQLite database.
 
@@ -18,6 +22,10 @@ The project follows semantic versioning once tagged releases begin.
 - Authorization tests for user dataset ownership and RAG access rules.
 - Maintainer governance, community conduct, and repository editor configuration.
 - Issue intake links for security and support guidance.
+
+### Changed
+
+- GitHub Actions references are pinned to immutable commit SHAs.
 
 ### Planned
 
