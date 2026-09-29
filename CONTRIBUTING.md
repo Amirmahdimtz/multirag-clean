@@ -26,17 +26,21 @@ For local configuration and service startup, follow the repository README.
 
 ## Tests
 
-Run the deterministic test suite from the repository root:
+After installing the development dependencies, run the same local quality gate
+used by contributors on Linux, macOS, and Windows:
 
 ```bash
-python -m unittest discover -s tests -p "test_*.py" -v
+python scripts/check.py
 ```
 
-Before opening a pull request, also run the same static lint gate used by CI:
+The script runs Ruff, bytecode compilation, and the deterministic unit and
+integration tests. CI additionally measures source coverage with `coverage.py`.
+
+You can still run individual checks directly when iterating on a focused change:
 
 ```bash
-python -m pip install "ruff>=0.8,<1"
-python -m ruff check src tests alembic main.py
+python -m ruff check src tests alembic main.py scripts
+python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 See [docs/testing.md](docs/testing.md) for the current testing strategy.
