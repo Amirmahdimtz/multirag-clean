@@ -2,7 +2,6 @@
 
 ![CI](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/ci.yml/badge.svg)
 ![CodeQL](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/codeql.yml/badge.svg)
-![Dependency Review](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/dependency-review.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Release](https://img.shields.io/github/v/release/Amirmahdimtz/multirag-clean)
@@ -421,7 +420,7 @@ changes are recorded in [CHANGELOG.md](CHANGELOG.md), maintainer release checks
 are documented in [docs/maintenance.md](docs/maintenance.md), and usage/support
 guidance is available in [SUPPORT.md](SUPPORT.md). Governance and maintainer responsibilities are documented in [MAINTAINERS.md](MAINTAINERS.md), and community expectations are defined in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-Dependency updates are monitored with Dependabot. Pull requests that change dependencies are reviewed for known high-severity vulnerabilities, and CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence.
+Dependency updates are monitored with Dependabot, and CodeQL scans Python code on pull requests, default-branch changes, and a scheduled cadence.
 
 ## Contributing and security
 
