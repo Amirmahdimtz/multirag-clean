@@ -4,6 +4,7 @@
 ![CodeQL](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/codeql.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
+![Release](https://img.shields.io/github/v/release/Amirmahdimtz/multirag-clean)
 
 MultiRAG Clean is a FastAPI service for managing users, datasets, vector search,
 RAG systems, access control, and streamed chat. It is a layered rewrite of the
@@ -405,6 +406,12 @@ admin keys may perform cross-user administration.
 The rewrite preserves the original project's main operational goals while
 changing the internal architecture to the company's layered Dependency
 Injection style.
+
+## Releases
+
+The latest tagged release is [v0.1.0](https://github.com/Amirmahdimtz/multirag-clean/releases/tag/v0.1.0).
+Release checks and maintenance policy are documented in
+[docs/maintenance.md](docs/maintenance.md).
 
 ## Project maintenance
 
