@@ -1,6 +1,7 @@
 # MultiRAG Clean
 
 ![CI](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/ci.yml/badge.svg)
+![CodeQL](https://github.com/Amirmahdimtz/multirag-clean/actions/workflows/codeql.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 
@@ -404,6 +405,16 @@ admin keys may perform cross-user administration.
 The rewrite preserves the original project's main operational goals while
 changing the internal architecture to the company's layered Dependency
 Injection style.
+
+## Project maintenance
+
+The public maintenance plan is tracked in [ROADMAP.md](ROADMAP.md). Notable
+changes are recorded in [CHANGELOG.md](CHANGELOG.md), maintainer release checks
+are documented in [docs/maintenance.md](docs/maintenance.md), and usage/support
+guidance is available in [SUPPORT.md](SUPPORT.md).
+
+Dependency updates are monitored with Dependabot, and CodeQL scans Python code
+on pull requests, default-branch changes, and a scheduled cadence.
 
 ## Contributing and security
 
