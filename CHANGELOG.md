@@ -6,6 +6,13 @@ The project follows semantic versioning once tagged releases begin.
 
 ## Unreleased
 
+### Added
+
+- Dependency review workflow for pull requests that change dependencies.
+- Authorization tests for user dataset ownership and RAG access rules.
+- Maintainer governance, community conduct, and repository editor configuration.
+- Issue intake links for security and support guidance.
+
 ### Planned
 
 - versioned database migrations;
