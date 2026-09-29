@@ -62,6 +62,7 @@ HTTP request
 
 ```text
 multirag-clean/
+├── alembic/
 ├── config/config.yaml
 ├── deploy/
 ├── docs/
@@ -150,6 +151,16 @@ python -m unittest discover -s tests -p "test_*.py" -v
 GitHub Actions also compiles `src/` and `tests/` and runs these tests for
 pull requests and pushes to `main`.
 
+Database migrations are versioned with Alembic. With
+`MULTIRAG_DATABASE_URL` configured for a disposable development database:
+
+```bash
+alembic upgrade head
+alembic check
+```
+
+`alembic check` should report no pending schema operations.
+
 ## Local execution
 
 Run the service from the project root:
@@ -187,6 +198,8 @@ Validate and start the stack:
 docker compose --env-file .env config --quiet
 docker compose --env-file .env build --pull app
 docker compose --env-file .env pull postgres vllm
+docker compose --env-file .env up -d postgres
+docker compose --env-file .env run --rm --no-deps app alembic upgrade head
 docker compose --env-file .env up -d
 chmod +x deploy/healthcheck.sh
 ./deploy/healthcheck.sh
@@ -459,11 +472,26 @@ Please do not report suspected vulnerabilities in a public issue. Follow
 - [ ] Logs, disk usage, container health, GPU memory, latency, and error rate are monitored.
 - [ ] A tested rollback procedure and the previous image digests are available.
 
-### Known production follow-up
+### Database migrations
 
-The current application initializes tables with SQLAlchemy metadata. Before
-the first production schema change, add a versioned migration workflow such as
-Alembic and test both upgrade and rollback against a database backup.
+Schema changes are versioned under `alembic/versions/`. Apply migrations
+before starting a new application version:
+
+```bash
+alembic upgrade head
+```
+
+For an existing pre-migration `v0.1.0` database whose schema has been verified
+to match the initial migration, back it up first and then mark the existing
+schema without recreating tables:
+
+```bash
+alembic stamp 0001_initial_schema
+```
+
+Do not stamp an unknown or modified database. For production changes, test both
+upgrade and rollback against a restored backup before touching the live
+database.
 
 ## Delivery hygiene
 
