@@ -114,6 +114,8 @@ MULTIRAG_PGVECTOR_VECTOR_SIZE=1024
 docker compose --env-file .env config --quiet
 docker compose --env-file .env build --pull app
 docker compose --env-file .env pull postgres vllm
+docker compose --env-file .env up -d postgres
+docker compose --env-file .env run --rm --no-deps app alembic upgrade head
 docker compose --env-file .env up -d
 ```
 
@@ -199,20 +201,43 @@ docker compose --env-file .env restart postgres
 ## 8. روند امن update
 
 1. از دیتابیس و فایل‌های آپلودشده backup بگیرید.
-2. نسخه imageهای `PGVECTOR_IMAGE` و `VLLM_IMAGE` را آگاهانه تغییر دهید.
-3. Compose را validate کنید.
-4. imageها را pull/build کنید.
-5. سرویس‌ها را recreate و health check کنید.
+2. migrationهای نسخه جدید را روی restore همان backup آزمایش کنید.
+3. نسخه imageهای `PGVECTOR_IMAGE` و `VLLM_IMAGE` را آگاهانه تغییر دهید.
+4. Compose را validate کنید.
+5. imageها را pull/build کنید.
+6. migration را اجرا کنید.
+7. سرویس‌ها را recreate و health check کنید.
 
 ```bash
 docker compose --env-file .env config --quiet
 docker compose --env-file .env pull postgres vllm
 docker compose --env-file .env build --pull app
+docker compose --env-file .env up -d postgres
+docker compose --env-file .env run --rm --no-deps app alembic upgrade head
 docker compose --env-file .env up -d --remove-orphans
 ./deploy/healthcheck.sh
 ```
 
 برای rollback باید tag قبلی imageها و backup دیتابیس در دسترس باشد. قبل از upgrade نسخه اصلی PostgreSQL، راهنمای رسمی upgrade و سازگاری pgvector را بررسی کنید.
+
+## 8.1. مدیریت migration دیتابیس
+
+تغییرات schema با Alembic نسخه‌بندی می‌شوند. قبل از هر deployment:
+
+```bash
+docker compose --env-file .env up -d postgres
+docker compose --env-file .env run --rm --no-deps app alembic upgrade head
+```
+
+برای دیتابیس قدیمی `v0.1.0` فقط وقتی schema دقیقاً با migration اولیه
+تطبیق داده شده و backup معتبر دارید، می‌توان revision اولیه را stamp کرد:
+
+```bash
+docker compose --env-file .env run --rm --no-deps app \
+  alembic stamp 0001_initial_schema
+```
+
+روی دیتابیس ناشناخته یا تغییر‌یافته از `stamp` استفاده نکنید.
 
 ## 9. Backup پایه PostgreSQL
 
