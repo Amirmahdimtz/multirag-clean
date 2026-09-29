@@ -19,7 +19,7 @@ For the project's trust boundaries and deployment assumptions, see [docs/securit
 
 Please do not open a public GitHub Issue for a suspected security vulnerability.
 
-Use GitHub's private vulnerability reporting or security advisory flow for this repository when available. If private reporting is not available, contact the repository maintainer through GitHub before sharing exploit details publicly.
+Start from the repository [Security page](https://github.com/Amirmahdimtz/multirag-clean/security). If GitHub offers a private "Report a vulnerability" flow, use it so exploit details are not disclosed publicly. If private reporting is unavailable, contact the repository maintainer through GitHub before sharing exploit details.
 
 When reporting a vulnerability, include:
 
