@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -5,6 +7,9 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.application.common.dtos.error_response_dto import ErrorResponseDto
 from src.core.exceptions.app_exception import AppException
+
+
+logger = logging.getLogger(__name__)
 
 
 async def app_exception_handler(
@@ -56,6 +61,13 @@ async def unhandled_exception_handler(
     request: Request,
     exc: Exception,
 ) -> JSONResponse:
+    logger.error(
+        "Unhandled exception for %s %s",
+        request.method,
+        request.url.path,
+        exc_info=(type(exc), exc, exc.__traceback__),
+    )
+
     response = ErrorResponseDto(
         message="Internal server error",
         errors=None,
