@@ -24,7 +24,26 @@ The current unit tests cover focused behavior including:
 - user dataset ownership boundaries;
 - RAG access authorization rules;
 - deterministic fake embedding behavior and normalization;
-- migration upgrade, drift, and downgrade behavior.
+- migration upgrade, drift, and downgrade behavior;
+- RAG-system creation, vector-index, and embedding-compatibility invariants;
+- chat session resource validation, ownership checks, and simple streaming
+  persistence behavior.
+
+## Coverage reporting
+
+CI records branch-aware Python source coverage with `coverage.py` and prints
+missing source lines in the `tests` job. Coverage is currently used as a
+maintenance signal rather than a hard percentage gate: new behavior should be
+covered according to risk, and the project should avoid low-value tests written
+only to increase a number.
+
+For a local coverage report:
+
+```bash
+python -m pip install "coverage[toml]>=7.6,<8"
+python -m coverage run -m unittest discover -s tests -p "test_*.py" -v
+python -m coverage report
+```
 
 ## Deterministic integration coverage
 
